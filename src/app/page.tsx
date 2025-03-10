@@ -3,8 +3,7 @@ import Card from "./components/Card";
 export default function Home() {
   return (
     <div>
-      Pokedex
-      <Card />
+      <Card pokemonName="Bulbasaur" />
     </div>
   );
 }

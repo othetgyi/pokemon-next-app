@@ -1,15 +1,14 @@
 import * as React from "react";
 import Image from "next/image";
 
-const Card = ({
-  pokemonName,
-  image,
-}: {
+interface CardProps {
   pokemonName: string;
   image: string;
-}) => {
+}
+
+const Card: React.FC<CardProps> = ({ pokemonName, image }) => {
   return (
-    <div className="flex flex-col bg-teal-100 h-64 w-64 p-4 rounded-lg justify-center">
+    <div className="flex flex-col bg-teal-100 h-48 w-48 p-6 rounded-lg justify-center">
       <div className="flex justify-center">
         <Image
           alt={`Image of ${pokemonName}`}

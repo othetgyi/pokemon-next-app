@@ -13,8 +13,9 @@ const Card: React.FC<CardProps> = ({ pokemonName, image }) => {
         <Image
           alt={`Image of ${pokemonName}`}
           src={image}
-          width={200}
-          height={200}
+          width={150}
+          height={150}
+          className="size-32"
         />
       </div>
       <div className="text-3xl font-bold flex justify-center">

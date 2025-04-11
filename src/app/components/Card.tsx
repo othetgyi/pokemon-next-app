@@ -1,14 +1,21 @@
 import * as React from "react";
 import Image from "next/image";
+import Label from "./Label";
 
 interface CardProps {
   pokemonName: string;
   image: string;
+  types: {
+    type: {
+      name: string;
+    };
+    slot: number;
+  }[];
 }
 
-const Card: React.FC<CardProps> = ({ pokemonName, image }) => {
+const Card: React.FC<CardProps> = ({ pokemonName, image, types }) => {
   return (
-    <div className="flex flex-col bg-teal-100 h-48 w-48 p-6 rounded-lg justify-center">
+    <div className="flex flex-col bg-teal-100 h-56 w-48 p-6 rounded-lg justify-center">
       <div className="flex justify-center">
         <Image
           alt={`Image of ${pokemonName}`}
@@ -18,6 +25,14 @@ const Card: React.FC<CardProps> = ({ pokemonName, image }) => {
           className="size-32"
         />
       </div>
+      {types.map((typeObj) => {
+        return (
+          <div className="p-1" key={typeObj.slot}>
+            <Label type={typeObj.type.name} />
+          </div>
+        );
+      })}
+
       <div className="text-3xl font-bold flex justify-center">
         <h3>{pokemonName}</h3>
       </div>

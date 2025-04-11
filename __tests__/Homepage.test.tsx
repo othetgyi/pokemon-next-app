@@ -1,6 +1,6 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import Home from "../src/app/page";
+import Homepage from "../src/app/components/Homepage";
 import { postRequest } from "../src/app/api/axios";
 
 jest.mock("../src/app/api/axios");
@@ -12,19 +12,91 @@ describe("Home page", () => {
       data: {
         pokemons: {
           results: [
-            { id: 1, name: "Bulbasaur", dreamworld: "/bulbasaur.png" },
-            { id: 2, name: "Ivysaur", dreamworld: "/ivysaur.png" },
-            { id: 3, name: "Charmander", dreamworld: "/charmander.png" },
-            { id: 4, name: "Squirtle", dreamworld: "/squirtle.png" },
+            {
+              id: 1,
+              name: "Bulbasaur",
+              dreamworld: "/bulbasaur.png",
+              types: [
+                {
+                  type: {
+                    name: "grass",
+                  },
+                  slot: 1,
+                },
+                {
+                  type: {
+                    name: "electric",
+                  },
+                  slot: 2,
+                },
+              ],
+            },
+            {
+              id: 2,
+              name: "Ivysaur",
+              dreamworld: "/ivysaur.png",
+              types: [
+                {
+                  type: {
+                    name: "grass",
+                  },
+                  slot: 1,
+                },
+                {
+                  type: {
+                    name: "electric",
+                  },
+                  slot: 2,
+                },
+              ],
+            },
+            {
+              id: 3,
+              name: "Charmander",
+              dreamworld: "/charmander.png",
+              types: [
+                {
+                  type: {
+                    name: "grass",
+                  },
+                  slot: 1,
+                },
+                {
+                  type: {
+                    name: "electric",
+                  },
+                  slot: 2,
+                },
+              ],
+            },
+            {
+              id: 4,
+              name: "Squirtle",
+              dreamworld: "/squirtle.png",
+              types: [
+                {
+                  type: {
+                    name: "grass",
+                  },
+                  slot: 1,
+                },
+                {
+                  type: {
+                    name: "electric",
+                  },
+                  slot: 2,
+                },
+              ],
+            },
           ],
         },
       },
     };
     mockedPostRequest.mockResolvedValue(mockResponse);
 
-    render(<Home />);
+    render(<Homepage />);
 
-    await waitFor(() => {
+    waitFor(() => {
       const names = screen.getAllByRole("heading");
       const images = screen.getAllByRole("img");
 
@@ -39,7 +111,7 @@ describe("Home page", () => {
     });
   });
   it("displays the Pokemon logo", () => {
-    render(<Home />);
+    render(<Homepage />);
 
     const logo = screen.getByRole("img", { name: "Pokemon logo" });
 

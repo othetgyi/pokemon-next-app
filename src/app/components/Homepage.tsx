@@ -5,8 +5,22 @@ import { postRequest } from "../api/axios";
 import Image from "next/image";
 import Grid from "./Grid";
 
+export interface Pokemon {
+  id: number;
+  name: string;
+  dreamworld: string;
+  types: {
+    type: {
+      name: string;
+    };
+    slot: number;
+  }[];
+}
+
+export type PokemonArray = Pokemon[];
+
 const Homepage = () => {
-  const [pokemonDataArray, setPokemonDataArray] = useState([]);
+  const [pokemonData, setPokemonData] = useState<Pokemon[]>([]);
 
   const getPokemonDataArrayQuery = {
     operationName: "fetchPokemonData",
@@ -26,22 +40,68 @@ const Homepage = () => {
     },
   };
 
-  useEffect(() => {
-    const fetchPokemonData = async () => {
-      const pokemonData = await postRequest(
-        "https://graphql-pokeapi.graphcdn.app/",
-        getPokemonDataArrayQuery,
-        {
-          "content-type": "application/json",
+  const getPokemonDetailsQuery = (name: string) => ({
+    operationName: "fetchPokemonDetails",
+    query: `query fetchPokemonDetails($name: String!) {
+      pokemon(name: $name) {
+        types {
+          type {
+          name
+           }
+          slot
+          }
         }
-      );
-      console.log(
-        "***pokemonData.data.pokemons.results***",
-        pokemonData.data.pokemons.results
-      );
-      setPokemonDataArray(pokemonData.data.pokemons.results);
+      }
+    `,
+    variables: {
+      name,
+    },
+  });
+
+  useEffect(() => {
+    const fetchPokemonDataAndDetails = async () => {
+      try {
+        const pokemonData = await postRequest(
+          "https://graphql-pokeapi.graphcdn.app/",
+          getPokemonDataArrayQuery,
+          {
+            "content-type": "application/json",
+          }
+        );
+        const pokemonDataArray = pokemonData.data.pokemons.results;
+        console.log("***pokemonDataArray***", pokemonDataArray);
+
+        const pokemonDetailsData = await Promise.all(
+          pokemonDataArray.map((pokemon: Pokemon) =>
+            postRequest(
+              "https://graphql-pokeapi.graphcdn.app/",
+              getPokemonDetailsQuery(pokemon.name),
+              {
+                "content-type": "application/json",
+              }
+            )
+          )
+        );
+
+        console.log("***pokemonDetailsData***", pokemonDetailsData);
+
+        const combinedPokemonData = pokemonDataArray.map(
+          (pokemon: Pokemon, index: number) => ({
+            ...pokemon,
+            types: pokemonDetailsData[index].data.pokemon.types,
+
+            // types: pokemonDetailsData[index].data.pokemon.types.map(
+            // (type: { type: { name: string } }) => type.type.name
+          })
+        );
+        console.log("***combinedPokemonData***", combinedPokemonData);
+        setPokemonData(combinedPokemonData);
+      } catch (error) {
+        console.error("Error fetching Pokemon data and details", error);
+      }
     };
-    fetchPokemonData();
+
+    fetchPokemonDataAndDetails();
   }, []);
 
   return (
@@ -52,7 +112,7 @@ const Homepage = () => {
         width={300}
         height={300}
       />
-      <Grid pokemonDataArray={pokemonDataArray} />
+      <Grid pokemonData={pokemonData} />
     </div>
   );
 };

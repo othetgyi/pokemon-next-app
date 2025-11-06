@@ -15,7 +15,7 @@ interface CardProps {
 
 const Card: React.FC<CardProps> = ({ pokemonName, image, types }) => {
   return (
-    <div className="flex flex-col bg-teal-100 h-56 w-48 p-6 rounded-lg justify-center">
+    <div className="flex flex-col bg-teal-100 h-64 w-50 p-6 rounded-lg justify-center">
       <div className="flex justify-center">
         <Image
           alt={`Image of ${pokemonName}`}
@@ -25,13 +25,15 @@ const Card: React.FC<CardProps> = ({ pokemonName, image, types }) => {
           className="size-32"
         />
       </div>
-      {types.map((typeObj) => {
+        <div className="flex flex-wrap justify-center gap-1">
+      {types ? types.map((typeObj) => {
         return (
           <div className="p-1" key={typeObj.slot}>
             <Label type={typeObj.type.name} />
           </div>
         );
-      })}
+      }) : null}
+        </div>
 
       <div className="text-3xl font-bold flex justify-center">
         <h3>{pokemonName}</h3>

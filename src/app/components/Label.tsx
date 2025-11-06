@@ -3,7 +3,7 @@ import * as React from "react";
 const Label: React.FC<{ type: string }> = ({ type }) => {
   const colourMap = [
     { type: "bug", colour: "bg-lime-400" },
-    { type: "normal", colour: "bg-grey-400" },
+    { type: "normal", colour: "bg-gray-400" },
     { type: "fire", colour: "bg-red-600" },
     { type: "water", colour: "bg-blue-400" },
     { type: "electric", colour: "bg-yellow-400" },

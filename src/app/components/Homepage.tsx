@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { postRequest } from "../api/axios";
 import Image from "next/image";
 import Grid from "./Grid";
+import Button from "./Button";
 
 export interface Pokemon {
   id: number;
@@ -21,8 +22,9 @@ export type PokemonArray = Pokemon[];
 
 const Homepage = () => {
   const [pokemonData, setPokemonData] = useState<Pokemon[]>([]);
+  const [offset, setOffset] = useState(0);
 
-  const getPokemonDataArrayQuery = {
+  const getPokemonListQuery = {
     operationName: "fetchPokemonData",
     query: `query fetchPokemonData($limit: Int, $offset: Int) {
       pokemons(limit: $limit, offset: $offset) {
@@ -36,7 +38,7 @@ const Homepage = () => {
     `,
     variables: {
       limit: 12,
-      offset: 0,
+      offset: offset,
     },
   };
 
@@ -58,51 +60,51 @@ const Homepage = () => {
     },
   });
 
-  useEffect(() => {
-    const fetchPokemonDataAndDetails = async () => {
-      try {
-        const pokemonData = await postRequest(
-          "https://graphql-pokeapi.graphcdn.app/",
-          getPokemonDataArrayQuery,
-          {
-            "content-type": "application/json",
-          }
-        );
-        const pokemonDataArray = pokemonData.data.pokemons.results;
-        console.log("***pokemonDataArray***", pokemonDataArray);
+  const fetchPokemonDataAndDetails = async () => {
+    try {
+      const pokemonList = await postRequest(
+        "https://graphql-pokeapi.graphcdn.app/",
+        getPokemonListQuery,
+        {
+          "content-type": "application/json",
+        }
+      );
+      const pokemonListArray = pokemonList.data.pokemons.results;
+      console.log("***pokemonDataArray***", pokemonListArray);
 
-        const pokemonDetailsData = await Promise.all(
-          pokemonDataArray.map((pokemon: Pokemon) =>
-            postRequest(
-              "https://graphql-pokeapi.graphcdn.app/",
-              getPokemonDetailsQuery(pokemon.name),
-              {
-                "content-type": "application/json",
-              }
-            )
+      const pokemonDetailsData = await Promise.all(
+        pokemonListArray.map((pokemon: Pokemon) =>
+          postRequest(
+            "https://graphql-pokeapi.graphcdn.app/",
+            getPokemonDetailsQuery(pokemon.name),
+            {
+              "content-type": "application/json",
+            }
           )
-        );
+        )
+      );
+      console.log("***pokemonDetailsData***", pokemonDetailsData);
 
-        console.log("***pokemonDetailsData***", pokemonDetailsData);
+      const combinedPokemonData = pokemonListArray.map(
+        (pokemon: Pokemon, index: number) => ({
+          ...pokemon,
+          types: pokemonDetailsData[index].data.pokemon ? pokemonDetailsData[index].data.pokemon.types : null,
+        })
+      );
 
-        const combinedPokemonData = pokemonDataArray.map(
-          (pokemon: Pokemon, index: number) => ({
-            ...pokemon,
-            types: pokemonDetailsData[index].data.pokemon.types,
+      setPokemonData((prevData) => [...prevData, ...combinedPokemonData]);
+    } catch (error) {
+      console.error("Error fetching Pokemon data and details", error);
+    }
+  };
 
-            // types: pokemonDetailsData[index].data.pokemon.types.map(
-            // (type: { type: { name: string } }) => type.type.name
-          })
-        );
-        console.log("***combinedPokemonData***", combinedPokemonData);
-        setPokemonData(combinedPokemonData);
-      } catch (error) {
-        console.error("Error fetching Pokemon data and details", error);
-      }
-    };
-
+  useEffect(() => {
     fetchPokemonDataAndDetails();
-  }, []);
+  }, [offset]);
+
+  const handleClick = () => {
+    setOffset((prevOffset) => prevOffset + 12);
+  };
 
   return (
     <div className="p-4">
@@ -113,6 +115,7 @@ const Homepage = () => {
         height={300}
       />
       <Grid pokemonData={pokemonData} />
+      <Button text="Load more Pokemon" onClick={handleClick} />
     </div>
   );
 };

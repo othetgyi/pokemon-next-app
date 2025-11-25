@@ -6,6 +6,7 @@ import {fetchPokemonDetails} from "@/app/api/fetchPokemonDetails";
 import Image from "next/image";
 import Grid from "./Grid";
 import Button from "./Button";
+import SearchBar from "./SearchBar";
 
 const Homepage = () => {
   const [pokemonData, setPokemonData] = useState<Pokemon[]>([]);
@@ -38,13 +39,16 @@ const Homepage = () => {
   };
 
   return (
-    <div className="p-4">
+    <div className="max-w-4xl mx-auto p-4">
       <Image
         alt={"Pokemon logo"}
         src="/pokemon_logo.png"
         width={300}
         height={300}
       />
+        <div className="flex justify-end">
+            <SearchBar />
+        </div>
       <Grid pokemonData={pokemonData} />
       <Button text="Load more Pokemon" onClick={handleClick} />
     </div>

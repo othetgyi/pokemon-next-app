@@ -19,7 +19,7 @@ interface GridProps {
 
 const Grid: React.FC<GridProps> = ({ pokemonData }) => {
   return (
-    <div className="w-5/6 p-4 flex flex-wrap pr-30 pl-30 gap-1">
+    <div className="p-4 flex flex-wrap pr-30 pl-30 gap-1">
       {pokemonData.map((pokemon) => {
         return (
           <Card

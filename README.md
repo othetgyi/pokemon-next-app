@@ -1,13 +1,9 @@
-This project was developed within the framework of the Christmas Coding Challenge 2025, organised by Women Coding Community.
-
 ## Run Project
 
 First, run the development server:
 
 ```bash
 npm run dev
-# or
-pnpm dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.

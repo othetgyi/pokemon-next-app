@@ -1,6 +1,6 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-## Getting Started
+## Run Project
 
 First, run the development server:
 
@@ -12,21 +12,37 @@ pnpm dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Dependency Hygiene
+### Version pinning and lockfile
+ - Pin all dependency versions to an exact version in package.json. No carets (^), tildes (~), or greater than/equals (>=). 
+ - All dependencies, including transitive dependencies, should be pinned in `package-lock.json`.
+ - Don't edit `package-lock.json` by hand.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Adding or updating dependencies
 
-## Learn More
+To add or change a dependency:
 
-To learn more about Next.js, take a look at the following resources:
+1. Install it with an explicit version:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+   ```bash
+   npm install <package-name>@<version> --save
+   # or
+   npm install <package-name>@<version> --save-dev
+   ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+2. This will update `package-lock.json`.
+3. Review the changes to both `package.json` and `package-lock.json`.
 
-## Deploy on Vercel
+### Lifecycle scripts
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Installing dependencies without lifecycle scripts should be the default. Run
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+  ```bash
+  npm ci --ignore-scripts
+  ```
+
+- The repository should not define `preinstall`, `install`, or `postinstall` scripts in `package.json`. Setup and project tasks are run via explicit npm scripts (e.g. `npm run build`, `npm test`).
+
+
+
+

@@ -1,9 +1,10 @@
-import Homepage from "./components/Homepage";
-
 export default function Home() {
   return (
     <div>
-      <Homepage />
+        <label>
+            Add a word to the dictionary:
+            <input type="text" />
+        </label>
     </div>
   );
 }

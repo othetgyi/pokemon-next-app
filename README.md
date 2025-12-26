@@ -1,4 +1,4 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+This project was developed within the framework of the Christmas Coding Challenge 2025, organised by Women Coding Community.
 
 ## Run Project
 

@@ -11,6 +11,7 @@ import SearchBar from "./SearchBar";
 const Homepage = () => {
   const [pokemonData, setPokemonData] = useState<Pokemon[]>([]);
   const [offset, setOffset] = useState(0);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const fetchPokemonDataAndDetails = async () => {
     const pokemonList = await fetchPokemonList(offset);
@@ -38,6 +39,20 @@ const Homepage = () => {
     setOffset((prevOffset) => prevOffset + 12);
   };
 
+  const handleSubmit = (e) => {
+      e.preventDefault();
+
+     const formData = new FormData(e.currentTarget);
+     const searchTerm = formData.get("search");
+      console.log("***searchTerm***", searchTerm);
+      setSearchTerm('');
+
+      };
+
+  const onChange = (e) => {
+      setSearchTerm(e.target.value)
+      }
+
   return (
     <div className="max-w-4xl mx-auto p-4">
       <Image
@@ -47,7 +62,7 @@ const Homepage = () => {
         height={300}
       />
         <div className="flex justify-end">
-            <SearchBar />
+            <SearchBar handleSubmit={handleSubmit} onChange={onChange} value={searchTerm} />
         </div>
       <Grid pokemonData={pokemonData} />
       <Button text="Load more Pokemon" onClick={handleClick} />

@@ -1,14 +1,12 @@
 import React from 'react';
 
-const SearchBar = () => {
-//     const handleSubmit = () => {
-//         const [input, setInput]
-//     }
+type SearchBarProps = { handleSubmit: () => void; onChange: () => void; value: string; };
 
+const SearchBar = ( {handleSubmit, onChange, value}: SearchBarProps) => {
     return (
-       // <form method={"GET"} onSubmit={handleSubmit}>
+        <form method={"GET"} onSubmit={handleSubmit}>
         <div className="relative">
-            <input className="border-2 border-sky-700 m-2 rounded placeholder:text-center pl-4" type="text" placeholder="Search for Pokemon" />
+            <input className="border-2 border-sky-700 m-2 rounded placeholder:text-center pl-4" type="text" name="search" placeholder="Search for Pokemon" value={value} onChange={onChange} />
             <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 p-1">
     <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -22,7 +20,7 @@ const SearchBar = () => {
     </svg>
   </span>
         </div>
-      //  </form>
+        </form>
     )
 }
 

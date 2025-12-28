@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import {fetchPokemonList, Pokemon} from "@/app/api/fetchPokemonList";
 import {fetchPokemonDetails} from "@/app/api/fetchPokemonDetails";
+import {fetchImageUrl} from "@/app/api/fetchImageUrl";
 import Image from "next/image";
 import Grid from "./Grid";
 import Button from "./Button";
@@ -39,14 +40,23 @@ const Homepage = () => {
     setOffset((prevOffset) => prevOffset + 12);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
       e.preventDefault();
 
      const formData = new FormData(e.currentTarget);
-     const searchTerm = formData.get("search");
-      console.log("***searchTerm***", searchTerm);
-      setSearchTerm('');
+     const pokemonName = formData.get("search");
+      try {
+          const result = await fetchPokemonDetails(pokemonName);
+          const pokemonImage = await fetchImageUrl(result.data.pokemon.name);
+          result.data.pokemon.dreamworld = pokemonImage;
+          setPokemonData([result.data.pokemon]);
+          }
+      catch (error) {
+          console.log(error)
+                     }
 
+
+      setSearchTerm('');
       };
 
   const onChange = (e) => {

@@ -9,14 +9,14 @@ const validateInput = (input: string) => {
         }
     }
 
-    if (specialChars.test(<string>input)) {
+    if (specialChars.test(input)) {
         return {
             isValid: false,
             message: "Those special characters are invalid"
         }
     }
 
-    if ((input as string).length < 3) {
+    if (input.length < 3) {
         return {
             isValid: false,
             message: "Minimum name length: 3 letters"

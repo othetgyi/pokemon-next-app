@@ -8,6 +8,7 @@ import Image from "next/image";
 import Grid from "./Grid";
 import Button from "./Button";
 import SearchBar from "./SearchBar";
+import validateInput from "../utils/validateInput";
 
 const Homepage = () => {
   const [pokemonData, setPokemonData] = useState<Pokemon[]>([]);
@@ -45,6 +46,11 @@ const Homepage = () => {
 
      const formData = new FormData(e.currentTarget);
      const pokemonName = formData.get("search");
+     const {isValid, message} = validateInput(pokemonName);
+     console.log("***isValid***", isValid);
+     console.log("***message***", message);
+     if (!isValid) return;
+
       try {
           const result = await fetchPokemonDetails(pokemonName);
           const pokemonImage = await fetchImageUrl(result.data.pokemon.name);

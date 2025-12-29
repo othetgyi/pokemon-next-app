@@ -1,6 +1,6 @@
 import React from 'react';
 
-type SearchBarProps = { handleSubmit: () => void; onChange: () => void; value: string; };
+type SearchBarProps = { handleSubmit: () => void; onChange: () => void; value: string };
 
 const SearchBar = ( {handleSubmit, onChange, value}: SearchBarProps) => {
     return (

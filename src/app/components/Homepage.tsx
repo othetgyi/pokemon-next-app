@@ -14,6 +14,8 @@ const Homepage = () => {
   const [pokemonData, setPokemonData] = useState<Pokemon[]>([]);
   const [offset, setOffset] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
+  const [isValid, setIsValid] = useState(true);
+  const [error, setError] = useState("");
 
   const fetchPokemonDataAndDetails = async () => {
     const pokemonList = await fetchPokemonList(offset);
@@ -47,6 +49,8 @@ const Homepage = () => {
      const formData = new FormData(e.currentTarget);
      const pokemonName = formData.get("search");
      const {isValid, message} = validateInput(pokemonName);
+     setIsValid(isValid);
+     setError(message);
      console.log("***isValid***", isValid);
      console.log("***message***", message);
      if (!isValid) return;
@@ -60,7 +64,6 @@ const Homepage = () => {
       catch (error) {
           console.log(error)
                      }
-
 
       setSearchTerm('');
       };
@@ -77,8 +80,11 @@ const Homepage = () => {
         width={300}
         height={300}
       />
-        <div className="flex justify-end">
-            <SearchBar handleSubmit={handleSubmit} onChange={onChange} value={searchTerm} />
+      <div className="flex justify-end">
+        <div className="flex flex-col ">
+            <SearchBar handleSubmit={handleSubmit} onChange={onChange} value={searchTerm} className={isValid ? "" : "invalid"} />
+            {!isValid ? <div className="w-full pt h-8 text-red-600 text-xs">{error}</div> : null }
+        </div>
         </div>
       <Grid pokemonData={pokemonData} />
       <Button text="Load more Pokemon" onClick={handleClick} />

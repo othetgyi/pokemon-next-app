@@ -13,14 +13,14 @@ const validateInput = (input: string) => {
     if (specialChars.test(<string>input)) {
         return {
             isValid: false,
-            message: "Pokemon cannot contain those special characters"
+            message: "Those special characters are invalid"
         }
     }
 
     if ((input as string).length < 3) {
         return {
             isValid: false,
-            message: "Names must be at least three letters long"
+            message: "Minimum name length: 3 letters"
         }
     }
 

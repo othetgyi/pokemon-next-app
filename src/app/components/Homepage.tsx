@@ -43,7 +43,7 @@ const Homepage = () => {
     setOffset((prevOffset) => prevOffset + 12);
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
 
      const formData = new FormData(e.currentTarget);
@@ -51,8 +51,7 @@ const Homepage = () => {
      const {isValid, message} = validateInput(pokemonName);
      setIsValid(isValid);
      setError(message);
-     console.log("***isValid***", isValid);
-     console.log("***message***", message);
+
      if (!isValid) return;
 
       try {
@@ -68,7 +67,7 @@ const Homepage = () => {
       setSearchTerm('');
       };
 
-  const onChange = (e) => {
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       setSearchTerm(e.target.value)
       }
 
@@ -83,7 +82,7 @@ const Homepage = () => {
       <div className="flex justify-end">
         <div className="flex flex-col ">
             <SearchBar handleSubmit={handleSubmit} onChange={onChange} value={searchTerm} className={isValid ? "" : "invalid"} />
-            {!isValid ? <div className="w-full pt h-8 text-red-600 text-xs">{error}</div> : null }
+            {!isValid ? <div className="w-full pt-1 h-8 text-red-600 text-xs">{error}</div> : null }
         </div>
         </div>
       <Grid pokemonData={pokemonData} />

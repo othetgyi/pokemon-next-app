@@ -42,7 +42,7 @@ export const fetchPokemonList = async (offset = 0) => {
             }
         );
         const pokemonListArray = pokemonList.data.pokemons.results;
-        console.log("***pokemonListArray***", pokemonListArray);
+
         return pokemonListArray;
     } catch (error) {
         console.error("Error fetching Pokemon list", error);

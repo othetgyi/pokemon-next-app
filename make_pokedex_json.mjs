@@ -23,7 +23,6 @@ async function fetchAllSpeciesNames() {
 
 async function main() {
     const names = await fetchAllSpeciesNames();
-    console.log('***name***', names);
     const out = { count: names.length, names };
     await writeFile('pokedex_base_names.json', JSON.stringify(out, null, 2), { encoding: 'utf-8' });
     console.log(`Wrote pokedex_base_names.json with ${names.length} base Pokémon names.`);

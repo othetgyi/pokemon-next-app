@@ -1,7 +1,6 @@
 import pokemonNames from './pokedex_base_names.json';
 
 const validateInput = (input: string) => {
-    console.log("***pokemonNames***", pokemonNames)
     const specialChars = /[~`!@#$%^&*()_+\=\[\]{};:"\\|,<>\/?]/;
     if (!input) {
         return {

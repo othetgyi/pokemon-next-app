@@ -7,7 +7,7 @@ function titlecase(name) {
     if (name === 'nidoran-f') return 'Nidoran♀';
     if (name === 'nidoran-m') return 'Nidoran♂';
     const titledParts = parts.map(p => exceptions[p] ?? (p.charAt(0).toUpperCase() + p.slice(1)));
-    let candidate = titledParts.join(' ');
+    const candidate = titledParts.join(' ');
     const fixes = { 'Porygon Z': 'Porygon-Z', 'Ho Oh': 'Ho-Oh', 'Mime Jr': 'Mime Jr.', 'Mr Mime': 'Mr. Mime', 'Mr Rime': 'Mr. Rime', 'FlabeBe': 'Flabébé', 'Type Null': 'Type: Null', 'Hakamo O': 'Hakamo-o', 'Kommo O': 'Kommo-o', 'Jangmo O': 'Jangmo-o', 'Farfetchd': "Farfetch'd", 'Sirfetchd': 'Sirfetch’d', };
     return fixes[candidate] ?? candidate;
 }

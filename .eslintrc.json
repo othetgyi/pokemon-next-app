@@ -1,0 +1,24 @@
+{
+  "extends": [
+    "next/core-web-vitals",
+    "plugin:react/jsx-runtime"
+  ],
+  "ignorePatterns": [
+    "node_modules/",
+    ".next/",
+    "out/",
+    "coverage/",
+    "dist/",
+    "build/"
+  ],
+  "rules": {
+    "no-unused-vars": "error",
+    "prefer-const": [
+      "error",
+      {
+        "ignoreReadBeforeAssign": true
+      }
+    ]
+  }
+}
+

@@ -1,5 +1,4 @@
 import js from "@eslint/js";
-import globals from "globals";
 import tseslint from "typescript-eslint";
 import pluginReact from "eslint-plugin-react";
 
@@ -14,7 +13,11 @@ export default tseslint.config(
         ...pluginReact.configs.flat.recommended,
         languageOptions: {
             ...pluginReact.configs.flat.recommended.languageOptions,
-            globals: globals.browser,
+            globals: {
+                process: 'readonly',
+                fetch: 'readonly',
+                console: 'readonly'
+            },
             parserOptions: {
                 ecmaFeatures: {
                     jsx: true,
@@ -28,7 +31,14 @@ export default tseslint.config(
         },
         rules: {
             ...pluginReact.configs.flat.recommended.rules,
-            "no-unused-vars": "error",
+            "@typescript-eslint/no-unused-vars": [
+                "error",
+                {
+                    argsIgnorePattern: "^_",
+                    varsIgnorePattern: "^_",
+                    caughtErrorsIgnorePattern: "^_"
+                }
+            ],
             "prefer-const": ["error", {ignoreReadBeforeAssign: true}],
             "react/react-in-jsx-scope": "off",
             "react/jsx-uses-react": "off",

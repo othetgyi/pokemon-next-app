@@ -1,7 +1,7 @@
 import pokemonNames from './pokedex_base_names.json';
 
 const validateInput = (input: string) => {
-    const specialChars = /[~`!@#$%^&*()_+\=\[\]{};:"\\|,<>\/?]/;
+    const specialChars = /[~`!@#$%^&*()_+=[\]{};:"\\|,<>/?]/;
     if (!input) {
         return {
             isValid: false,
@@ -23,10 +23,10 @@ const validateInput = (input: string) => {
         }
     }
 
-if (!pokemonNames.names.includes(input.toLowerCase())) {
-    return {isValid: false, message: "No Pokemon matched your search"}
+    if (!pokemonNames.names.includes(input.toLowerCase())) {
+        return {isValid: false, message: "No Pokemon matched your search"}
     }
-return {isValid: true, message: ""};
+    return {isValid: true, message: ""};
 }
 
 export default validateInput;

@@ -1,4 +1,4 @@
-import { postRequest } from "./axios";
+import {postRequest} from "./axios";
 
 export const getPokemonDetailsQuery = (name: string) => ({
     operationName: "fetchPokemonDetails",
@@ -22,15 +22,22 @@ export const getPokemonDetailsQuery = (name: string) => ({
 
 export const fetchPokemonDetails = async (name: string) => {
     try {
-        const pokemonDetails = await postRequest(
+        const response = await postRequest(
             "https://graphql-pokeapi.graphcdn.app/",
             getPokemonDetailsQuery(name),
             {
                 "content-type": "application/json",
             }
         );
-        return pokemonDetails;
+
+        if (!response?.data?.pokemon) {
+            throw new Error(`No data returned for Pokemon: ${name}`)
+        }
+
+        return response;
     } catch (error) {
-        console.error("Error fetching Pokemon data", error);
+        throw new Error(
+            `Failed to fetch details for ${name}: ${error instanceof Error ? error.message : 'Unknown error'}`
+        );
     }
 }

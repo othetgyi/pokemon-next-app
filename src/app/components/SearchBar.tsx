@@ -1,26 +1,27 @@
 import React from 'react';
+import Button from "@/app/components/Button";
 
 type SearchBarProps = {
-    handleSubmit: (_event: React.FormEvent<HTMLFormElement>) => void | Promise<void>;
-    onChange: (_event: React.ChangeEvent<HTMLInputElement>) => void;
-    value: string;
-    isValid: boolean;
+  handleSubmit: (_event: React.FormEvent<HTMLFormElement>) => void | Promise<void>;
+  onChange: (_event: React.ChangeEvent<HTMLInputElement>) => void;
+  value: string;
+  isValid: boolean;
 };
 
 const SearchBar = ({handleSubmit, onChange, value, isValid}: SearchBarProps) => {
-    return (
-        <form method={"GET"} onSubmit={handleSubmit}>
-            <div className="relative">
-                <input
-                    className={`border-2 ${isValid ? "border-sky-700" : "border-red-600"
-                    } m-2 rounded placeholder:text-center pl-4 `}
-                    type="text"
-                    name="search"
-                    placeholder="Search for Pokemon"
-                    value={value}
-                    onChange={onChange}
-                />
-                <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 p-1">
+  return (
+      <form method={"GET"} onSubmit={handleSubmit} className={"flex flex-row items-center"}>
+        <div className="relative inline-block">
+          <input
+              className={`border-2 ${isValid ? "border-sky-700" : "border-red-600"
+              } m-2 rounded placeholder:text-center pl-4 pr-8`}
+              type="text"
+              name="search"
+              placeholder="Search for Pokemon"
+              value={value}
+              onChange={onChange}
+          />
+          <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 p-1">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         className="h-5 w-5"
@@ -29,12 +30,14 @@ const SearchBar = ({handleSubmit, onChange, value, isValid}: SearchBarProps) => 
                         stroke="currentColor"
                     >
                         <circle cx="11" cy="11" r="8" stroke="currentColor" strokeWidth="2"/>
-                        <line x1="21" y1="21" x2="16.65" y2="16.65" stroke="currentColor" strokeWidth="2"/>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65" stroke="currentColor"
+                              strokeWidth="2"/>
                     </svg>
                 </span>
-            </div>
-        </form>
-    )
+        </div>
+        <Button type="submit" text={"Find Pokemon"} ariaLabel="Submit"/>
+      </form>
+  )
 }
 
 export default SearchBar;

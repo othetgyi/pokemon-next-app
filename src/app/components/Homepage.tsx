@@ -91,7 +91,10 @@ const Homepage = () => {
   const filterOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const type = event.target.value;
     setSelectedTypes(currentState => currentState.includes(type) ? currentState.filter(pokemonType => pokemonType !== type) : [...currentState, type]);
+  }
 
+  const filterPokemon = () => {
+    // call fetchPokemonByType
   }
   return (
       <div className="max-w-4xl mx-auto p-4">
@@ -101,9 +104,10 @@ const Homepage = () => {
             width={300}
             height={300}
         />
-        <div className="flex justify-end">
+        <div className="flex justify-between">
           <div className="flex flex-col items-start">
-            <PokemonTypeFilter onChange={filterOnChange} selectedTypes={selectedTypes}/>
+            <PokemonTypeFilter onChange={filterOnChange} selectedTypes={selectedTypes}
+                               onFilter={filterPokemon}/>
           </div>
           <div className="flex flex-col items-end">
             <SearchBar handleSubmit={handleSubmit}

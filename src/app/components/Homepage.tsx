@@ -4,6 +4,7 @@ import {useState, useEffect} from "react";
 import {fetchPokemonList, Pokemon} from "@/app/api/fetchPokemonList";
 import {fetchPokemonDetails} from "@/app/api/fetchPokemonDetails";
 import {fetchImageUrl} from "@/app/api/fetchImageUrl";
+import {fetchPokemonByType} from "@/app/api/fetchPokemonByType";
 import Image from "next/image";
 import Grid from "./Grid";
 import Button from "./Button";
@@ -90,11 +91,18 @@ const Homepage = () => {
 
   const filterOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const type = event.target.value;
-    setSelectedTypes(currentState => currentState.includes(type) ? currentState.filter(pokemonType => pokemonType !== type) : [...currentState, type]);
+    setSelectedTypes(currentPokemonTypesArray => currentPokemonTypesArray.includes(type) ? currentPokemonTypesArray.filter(pokemonType => pokemonType !== type) : [...currentPokemonTypesArray, type]);
   }
 
-  const filterPokemon = () => {
-    // call fetchPokemonByType
+  const filterPokemon = async () => {
+    if (selectedTypes.length === 0) return;
+
+    try {
+      const pokemonListByType = await fetchPokemonByType(selectedTypes);
+      return setPokemonData(pokemonListByType.data.pokemon);
+    } catch (error) {
+      console.error(error);
+    }
   }
   return (
       <div className="max-w-4xl mx-auto p-4">

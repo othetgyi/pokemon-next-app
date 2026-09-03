@@ -18,6 +18,7 @@ const Homepage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [isValid, setIsValid] = useState(true);
   const [error, setError] = useState("");
+  const [filterError, setFilterError] = useState("");
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
 
   const fetchPokemonDataAndDetails = async () => {
@@ -94,11 +95,18 @@ const Homepage = () => {
     setSelectedTypes(currentPokemonTypesArray => currentPokemonTypesArray.includes(type) ? currentPokemonTypesArray.filter(pokemonType => pokemonType !== type) : [...currentPokemonTypesArray, type]);
   }
 
-  const filterPokemon = async () => {
+  const filterPokemonByType = async () => {
     if (selectedTypes.length === 0) return;
+    if (selectedTypes.length > 3) {
+      setFilterError("Please select up to 3 types only");
+      return;
+    }
 
+    setFilterError("");
+    
     try {
       const pokemonListByType = await fetchPokemonByType(selectedTypes);
+      console.log("***pokemonListByType***", pokemonListByType)
       return setPokemonData(pokemonListByType.data.pokemon);
     } catch (error) {
       console.error(error);
@@ -115,7 +123,8 @@ const Homepage = () => {
         <div className="flex justify-between">
           <div className="flex flex-col items-start">
             <PokemonTypeFilter onChange={filterOnChange} selectedTypes={selectedTypes}
-                               onFilter={filterPokemon}/>
+                               onFilter={filterPokemonByType}
+                               filterError={filterError}/>
           </div>
           <div className="flex flex-col items-end">
             <SearchBar handleSubmit={handleSubmit}

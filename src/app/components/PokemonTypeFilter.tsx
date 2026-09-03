@@ -5,7 +5,8 @@ const PokemonTypeFilter: React.FC<{
   onChange: (_event: React.ChangeEvent<HTMLInputElement>) => void;
   selectedTypes: string[];
   onFilter: () => void;
-}> = ({onChange, selectedTypes, onFilter}) => {
+  filterError: string;
+}> = ({onChange, selectedTypes, onFilter, filterError}) => {
   const types = [
     'bug',
     'dark',
@@ -48,6 +49,7 @@ const PokemonTypeFilter: React.FC<{
           })}
           <Button type="button" text="Filter Pokemon by type" ariaLabel="Filter"
                   onClick={onFilter}/>
+          <div className="w-full pt-1 h-8 text-red-600 text-s">{filterError}</div>
         </div>
       </fieldset>
   )

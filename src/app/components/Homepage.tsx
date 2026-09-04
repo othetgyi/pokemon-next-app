@@ -103,10 +103,13 @@ const Homepage = () => {
     }
 
     setFilterError("");
-    
+
     try {
       const pokemonListByType = await fetchPokemonByType(selectedTypes);
       console.log("***pokemonListByType***", pokemonListByType)
+      if (pokemonListByType.data.pokemon.length < 1) {
+        setFilterError("No Pokemon were found with those types")
+      }
       return setPokemonData(pokemonListByType.data.pokemon);
     } catch (error) {
       console.error(error);

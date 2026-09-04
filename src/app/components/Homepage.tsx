@@ -12,6 +12,10 @@ import SearchBar from "./SearchBar";
 import validateInput from "../utils/validateInput";
 import PokemonTypeFilter from "@/app/components/PokemonTypeFilter";
 
+export type PokemonType = {
+  id: number;
+  name: string;
+}
 const Homepage = () => {
   const [pokemonData, setPokemonData] = useState<Pokemon[]>([]);
   const [offset, setOffset] = useState(0);
@@ -110,7 +114,18 @@ const Homepage = () => {
       if (pokemonListByType.data.pokemon.length < 1) {
         setFilterError("No Pokemon were found with those types")
       }
-      return setPokemonData(pokemonListByType.data.pokemon);
+      try {
+        const pokemonTypeListDetails = await Promise.all(pokemonListByType.data.pokemon.map(async (pokemon: PokemonType) => {
+          const details = await fetchPokemonDetails(pokemon.name);
+          const dreamworld = await fetchImageUrl(details.data.pokemon.name);
+          return {...details.data.pokemon, dreamworld}
+        }));
+        console.log("***pokemonTypeListDetails", pokemonTypeListDetails);
+        setPokemonData(pokemonTypeListDetails);
+
+      } catch (fetchDetailsError) {
+        console.error(fetchDetailsError);
+      }
     } catch (error) {
       console.error(error);
     }

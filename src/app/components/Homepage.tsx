@@ -24,6 +24,7 @@ const Homepage = () => {
   const [error, setError] = useState("");
   const [filterError, setFilterError] = useState("");
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
+  const [pokemonTypesFound, setPokemonTypesFound] = useState<PokemonType[]>([]);
 
   const fetchPokemonDataAndDetails = async () => {
     try {
@@ -114,6 +115,8 @@ const Homepage = () => {
       if (pokemonListByType.data.pokemon.length < 1) {
         setFilterError("No Pokemon were found with those types")
       }
+      setPokemonTypesFound(pokemonListByType.data.pokemon);
+
       try {
         const pokemonTypeListDetails = await Promise.all(pokemonListByType.data.pokemon.map(async (pokemon: PokemonType) => {
           const details = await fetchPokemonDetails(pokemon.name);
@@ -130,6 +133,7 @@ const Homepage = () => {
       console.error(error);
     }
   }
+
   return (
       <div className="max-w-4xl mx-auto p-4">
         <Image
@@ -154,8 +158,9 @@ const Homepage = () => {
         </div>
         <Grid pokemonData={pokemonData}/>
         <div className={"flex justify-center mt-4"}>
-          <Button text="Load more Pokemon" type="button" ariaLabel="Get more Pokemon button"
-                  onClick={handleClick}/>
+          {pokemonTypesFound.length === 0 ?
+              <Button text="Load more Pokemon" type="button" ariaLabel="Get more Pokemon button"
+                      onClick={handleClick}/> : null}
         </div>
       </div>
   );

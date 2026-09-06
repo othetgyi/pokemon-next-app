@@ -12,13 +12,19 @@ import SearchBar from "./SearchBar";
 import validateInput from "../utils/validateInput";
 import PokemonTypeFilter from "@/app/components/PokemonTypeFilter";
 
+export type PokemonType = {
+  id: number;
+  name: string;
+}
 const Homepage = () => {
   const [pokemonData, setPokemonData] = useState<Pokemon[]>([]);
   const [offset, setOffset] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
   const [isValid, setIsValid] = useState(true);
   const [error, setError] = useState("");
+  const [filterError, setFilterError] = useState("");
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
+  const [pokemonTypesFound, setPokemonTypesFound] = useState<PokemonType[]>([]);
 
   const fetchPokemonDataAndDetails = async () => {
     try {
@@ -94,16 +100,40 @@ const Homepage = () => {
     setSelectedTypes(currentPokemonTypesArray => currentPokemonTypesArray.includes(type) ? currentPokemonTypesArray.filter(pokemonType => pokemonType !== type) : [...currentPokemonTypesArray, type]);
   }
 
-  const filterPokemon = async () => {
+  const filterPokemonByType = async () => {
     if (selectedTypes.length === 0) return;
+    if (selectedTypes.length > 3) {
+      setFilterError("Please select up to 3 types only");
+      return;
+    }
+
+    setFilterError("");
 
     try {
       const pokemonListByType = await fetchPokemonByType(selectedTypes);
-      return setPokemonData(pokemonListByType.data.pokemon);
+      console.log("***pokemonListByType***", pokemonListByType)
+      if (pokemonListByType.data.pokemon.length < 1) {
+        setFilterError("No Pokemon were found with those types")
+      }
+      setPokemonTypesFound(pokemonListByType.data.pokemon);
+
+      try {
+        const pokemonTypeListDetails = await Promise.all(pokemonListByType.data.pokemon.map(async (pokemon: PokemonType) => {
+          const details = await fetchPokemonDetails(pokemon.name);
+          const dreamworld = await fetchImageUrl(details.data.pokemon.name);
+          return {...details.data.pokemon, dreamworld}
+        }));
+        console.log("***pokemonTypeListDetails", pokemonTypeListDetails);
+        setPokemonData(pokemonTypeListDetails);
+
+      } catch (fetchDetailsError) {
+        console.error(fetchDetailsError);
+      }
     } catch (error) {
       console.error(error);
     }
   }
+
   return (
       <div className="max-w-4xl mx-auto p-4">
         <Image
@@ -115,7 +145,8 @@ const Homepage = () => {
         <div className="flex justify-between">
           <div className="flex flex-col items-start">
             <PokemonTypeFilter onChange={filterOnChange} selectedTypes={selectedTypes}
-                               onFilter={filterPokemon}/>
+                               onFilter={filterPokemonByType}
+                               filterError={filterError}/>
           </div>
           <div className="flex flex-col items-end">
             <SearchBar handleSubmit={handleSubmit}
@@ -127,8 +158,9 @@ const Homepage = () => {
         </div>
         <Grid pokemonData={pokemonData}/>
         <div className={"flex justify-center mt-4"}>
-          <Button text="Load more Pokemon" type="button" ariaLabel="Get more Pokemon button"
-                  onClick={handleClick}/>
+          {pokemonTypesFound.length === 0 ?
+              <Button text="Load more Pokemon" type="button" ariaLabel="Get more Pokemon button"
+                      onClick={handleClick}/> : null}
         </div>
       </div>
   );

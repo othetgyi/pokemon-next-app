@@ -26,7 +26,7 @@ export const getPokemonByTypeQuery = (types: string[]) => ({
 
 export const fetchPokemonByType = async (types: string[]) => {
   try {
-    return await postRequest("graphql.pokeapi.co/v1beta2", getPokemonByTypeQuery(types),
+    return await postRequest("https://graphql.pokeapi.co/v1beta2", getPokemonByTypeQuery(types),
         {
           "content-type": "application/json"
         }

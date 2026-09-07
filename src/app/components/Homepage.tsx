@@ -152,8 +152,9 @@ const Homepage = () => {
             <SearchBar handleSubmit={handleSubmit}
                        onChange={onChange}
                        value={searchTerm}
-                       isValid={isValid}/>
-            {!isValid ? <div className="w-full pt-1 h-8 text-red-600 text-xs">{error}</div> : null}
+                       isValid={isValid}
+                       error={error}
+            />
           </div>
         </div>
         <Grid pokemonData={pokemonData}/>

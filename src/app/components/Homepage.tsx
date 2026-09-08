@@ -85,6 +85,7 @@ const Homepage = () => {
       result.data.pokemon.dreamworld = pokemonImage;
       setPokemonData([result.data.pokemon]);
     } catch (error) {
+      setError("Something went wrong, please try again");
       console.log(error)
     }
 

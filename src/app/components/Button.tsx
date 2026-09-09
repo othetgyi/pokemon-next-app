@@ -5,18 +5,22 @@ const Button: React.FC<{
   type?: "button" | "reset" | "submit";
   ariaLabel?: string;
   onClick?: () => void;
+  disabled?: boolean;
 }> = ({
         text,
         type = "button",
         onClick,
-        ariaLabel = text
+        ariaLabel = text,
+        disabled = false
       }) => {
   return (
       <button
-          className="w-auto px-4 py-2 rounded-lg flex items-center justify-center bg-yellow-300 font-semibold text-gray-900 shadow-sm hover:bg-yellow-400 active:bg-yellow-500 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-1 transition-colors"
+          className="w-auto px-4 py-2 rounded-lg flex items-center justify-center bg-yellow-300 font-semibold text-gray-900 shadow-sm hover:bg-yellow-400 active:bg-yellow-500 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-1 transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-yellow-300"
           type={type}
           aria-label={ariaLabel}
-          onClick={onClick}>
+          onClick={onClick}
+          disabled={disabled}
+      >
         {text}
       </button>
   );

@@ -7,9 +7,17 @@ type SearchBarProps = {
   value: string;
   isValid: boolean;
   error: string;
+  isSearching: boolean;
 };
 
-const SearchBar = ({handleSubmit, onChange, value, isValid, error}: SearchBarProps) => {
+const SearchBar = ({
+                     handleSubmit,
+                     onChange,
+                     value,
+                     isValid,
+                     error,
+                     isSearching
+                   }: SearchBarProps) => {
   return (
       <form method={"GET"} onSubmit={handleSubmit}
             className={"bg-white rounded-lg shadow p-4 border border-gray-200"}>
@@ -39,7 +47,7 @@ const SearchBar = ({handleSubmit, onChange, value, isValid, error}: SearchBarPro
                     </svg>
                 </span>
           </div>
-          <Button type="submit" text={"Find Pokemon"} ariaLabel="Submit"/>
+          <Button disabled={isSearching} type="submit" text={"Find Pokemon"} ariaLabel="Submit"/>
         </div>
         {!isValid && error && (
             <div

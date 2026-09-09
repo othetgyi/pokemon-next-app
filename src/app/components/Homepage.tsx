@@ -25,6 +25,7 @@ const Homepage = () => {
   const [filterError, setFilterError] = useState("");
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
   const [pokemonTypesFound, setPokemonTypesFound] = useState<PokemonType[]>([]);
+  const [isSearching, setIsSearching] = useState(false);
 
   const fetchPokemonDataAndDetails = async () => {
     try {
@@ -72,13 +73,13 @@ const Homepage = () => {
     const formData = new FormData(event.currentTarget);
     const pokemonName = formData.get("search") as string;
     const {isValid, message} = validateInput(pokemonName);
-    console.log("***isValid***", {isValid});
     setIsValid(isValid);
 
     setError(message);
 
     if (!isValid) return;
 
+    setIsSearching(true);
     try {
       const result = await fetchPokemonDetails(pokemonName);
       const pokemonImage = await fetchImageUrl(result.data.pokemon.name);
@@ -87,6 +88,8 @@ const Homepage = () => {
     } catch (error) {
       setError("Something went wrong, please try again");
       console.log(error)
+    } finally {
+      setIsSearching(false);
     }
 
     setSearchTerm('');
@@ -155,6 +158,7 @@ const Homepage = () => {
                        value={searchTerm}
                        isValid={isValid}
                        error={error}
+                       isSearching={isSearching}
             />
           </div>
         </div>

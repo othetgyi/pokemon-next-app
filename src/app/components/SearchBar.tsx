@@ -19,7 +19,7 @@ const SearchBar = ({
                      isSearching
                    }: SearchBarProps) => {
   return (
-      <form method={"GET"} onSubmit={handleSubmit}
+      <form onSubmit={handleSubmit}
             className={"bg-white rounded-lg shadow p-4 border border-gray-200"}>
         <label htmlFor="search" className={"font-bold text-lg px-2"}>Search by name</label>
         <div className={"flex items-center gap-2 mt-2"}>

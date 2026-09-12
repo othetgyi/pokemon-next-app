@@ -21,10 +21,12 @@ const Homepage = () => {
   const [offset, setOffset] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
   const [isValid, setIsValid] = useState(true);
-  const [error, setError] = useState("");
+  const [pageError, setPageError] = useState("");
+  const [searchError, setSearchError] = useState("");
   const [filterError, setFilterError] = useState("");
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
   const [pokemonTypesFound, setPokemonTypesFound] = useState<PokemonType[]>([]);
+  const [isSearching, setIsSearching] = useState(false);
 
   const fetchPokemonDataAndDetails = async () => {
     try {
@@ -52,8 +54,9 @@ const Homepage = () => {
       })
       .filter((pokemon: Pokemon) => pokemon !== null);
       setPokemonData((prevData) => [...prevData, ...combinedPokemonData]);
+      setPageError("");
     } catch (error) {
-      setError("Failed to fetch Pokemon data");
+      setPageError("Failed to fetch Pokemon data");
       console.error(error);
     }
   };
@@ -68,31 +71,40 @@ const Homepage = () => {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (isSearching) return;
 
     const formData = new FormData(event.currentTarget);
     const pokemonName = formData.get("search") as string;
     const {isValid, message} = validateInput(pokemonName);
-    console.log("***isValid***", {isValid});
     setIsValid(isValid);
-
-    setError(message);
-
+    setSearchError(message);
     if (!isValid) return;
+
+    setSearchError("");
+    setIsSearching(true);
 
     try {
       const result = await fetchPokemonDetails(pokemonName);
       const pokemonImage = await fetchImageUrl(result.data.pokemon.name);
       result.data.pokemon.dreamworld = pokemonImage;
       setPokemonData([result.data.pokemon]);
+      setPageError("");
     } catch (error) {
-      console.log(error)
+      setPageError("Something went wrong, please try again");
+      console.error(error);
+    } finally {
+      setIsSearching(false);
     }
 
-    setSearchTerm('');
+    setSearchTerm("");
   };
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(event.target.value)
+    setSearchTerm(event.target.value);
+    if (!isValid) {
+      setIsValid(true);
+      setSearchError("");
+    }
   }
 
   const filterOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -152,10 +164,19 @@ const Homepage = () => {
             <SearchBar handleSubmit={handleSubmit}
                        onChange={onChange}
                        value={searchTerm}
-                       isValid={isValid}/>
-            {!isValid ? <div className="w-full pt-1 h-8 text-red-600 text-xs">{error}</div> : null}
+                       isValid={isValid}
+                       error={searchError}
+                       isSearching={isSearching}
+            />
           </div>
         </div>
+        {pageError && (
+            <div
+                className="mt-3 flex items-center gap-2 bg-red-50 border border-red-200 text-red-700 text-sm rounded-md px-3 py-2"
+                role="alert">
+              {pageError}
+            </div>
+        )}
         <Grid pokemonData={pokemonData}/>
         <div className={"flex justify-center mt-4"}>
           {pokemonTypesFound.length === 0 ?

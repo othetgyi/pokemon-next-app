@@ -54,6 +54,7 @@ const Homepage = () => {
       })
       .filter((pokemon: Pokemon) => pokemon !== null);
       setPokemonData((prevData) => [...prevData, ...combinedPokemonData]);
+      setPageError("");
     } catch (error) {
       setPageError("Failed to fetch Pokemon data");
       console.error(error);
@@ -79,8 +80,11 @@ const Homepage = () => {
     setSearchError(message);
 
     if (!isValid) return;
+    if (isSearching) return;
 
+    setSearchError("");
     setIsSearching(true);
+
     try {
       const result = await fetchPokemonDetails(pokemonName);
       const pokemonImage = await fetchImageUrl(result.data.pokemon.name);
@@ -93,7 +97,7 @@ const Homepage = () => {
       setIsSearching(false);
     }
 
-    setSearchTerm('');
+    setSearchTerm("");
   };
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {

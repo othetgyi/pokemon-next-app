@@ -78,8 +78,6 @@ const Homepage = () => {
     const {isValid, message} = validateInput(pokemonName);
     setIsValid(isValid);
     setSearchError(message);
-    setSearchError(message);
-    if (!isValid) return;
     if (!isValid) return;
 
     setSearchError("");

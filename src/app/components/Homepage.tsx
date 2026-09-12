@@ -71,16 +71,16 @@ const Homepage = () => {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (isSearching) return;
 
     const formData = new FormData(event.currentTarget);
     const pokemonName = formData.get("search") as string;
     const {isValid, message} = validateInput(pokemonName);
     setIsValid(isValid);
-
     setSearchError(message);
-
+    setSearchError(message);
     if (!isValid) return;
-    if (isSearching) return;
+    if (!isValid) return;
 
     setSearchError("");
     setIsSearching(true);
@@ -90,9 +90,10 @@ const Homepage = () => {
       const pokemonImage = await fetchImageUrl(result.data.pokemon.name);
       result.data.pokemon.dreamworld = pokemonImage;
       setPokemonData([result.data.pokemon]);
+      setPageError("");
     } catch (error) {
       setPageError("Something went wrong, please try again");
-      console.log(error)
+      console.error(error);
     } finally {
       setIsSearching(false);
     }

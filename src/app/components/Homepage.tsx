@@ -150,10 +150,10 @@ const Homepage = () => {
       <div className="flex flex-col items-center max-w-7xl mx-auto p-4">
         <div className="items-center">
           <Image
-              alt={"Pokemon logo"}
-              src="/pokemon_logo.png"
-              width={300}
-              height={300}
+              alt="Pokemon logo"
+              src="/pokemon_logo.svg"
+              width={400}
+              height={160}
           />
         </div>
         <div className="flex flex-col md:flex-row justify-between w-full gap-6 items-stretch">

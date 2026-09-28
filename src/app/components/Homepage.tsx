@@ -148,12 +148,13 @@ const Homepage = () => {
 
   return (
       <div className="flex flex-col items-center max-w-7xl mx-auto p-4">
-        <div className="items-center">
+        <div className="flex items-center justify-center py-6">
           <Image
               alt="Pokemon logo"
               src="/pokemon_logo.svg"
               width={400}
               height={160}
+              className="drop-shadow-xl"
           />
         </div>
         <div className="flex flex-col md:flex-row justify-between w-full gap-6 items-stretch">

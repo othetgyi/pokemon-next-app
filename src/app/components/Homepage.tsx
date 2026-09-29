@@ -147,20 +147,23 @@ const Homepage = () => {
   }
 
   return (
-      <div className="max-w-4xl mx-auto p-4">
-        <Image
-            alt={"Pokemon logo"}
-            src="/pokemon_logo.png"
-            width={300}
-            height={300}
-        />
-        <div className="flex justify-between">
-          <div className="flex flex-col items-start">
+      <div className="flex flex-col items-center max-w-7xl mx-auto p-4">
+        <div className="flex items-center justify-center py-6">
+          <Image
+              alt="Pokemon logo"
+              src="/pokemon_logo.svg"
+              width={400}
+              height={160}
+              className="drop-shadow-xl"
+          />
+        </div>
+        <div className="flex flex-col md:flex-row justify-between w-full gap-6 items-stretch">
+          <div className="w-full md:flex-1">
             <PokemonTypeFilter onChange={filterOnChange} selectedTypes={selectedTypes}
                                onFilter={filterPokemonByType}
                                filterError={filterError}/>
           </div>
-          <div className="flex flex-col items-end">
+          <div className="w-full md:flex-1 flex flex-col justify-center">
             <SearchBar handleSubmit={handleSubmit}
                        onChange={onChange}
                        value={searchTerm}
